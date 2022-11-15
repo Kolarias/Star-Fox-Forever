@@ -27,17 +27,17 @@ void Player::_init() {
 void Player::_ready() {
     start_pos = get_global_transform();
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
+    reticle = (Sprite3D*)(player->get_node("Reticle"));
     player_area = (Area*)(player->get_node("PlayerArea"));
-    reticle = (Sprite3D*)(player_area->get_node("Reticle"));
     player_area->connect("area_entered", player, "collision_handler");
-    raycast = (RayCast*)(player_area->get_node("RayCast"));
-    up_or_down = none;
-    left_or_right = neither;
 }
 
 void Player::_process(float delta) {
     // Get input
     input = Input::get_singleton();
+
+    // Always move forward
+    movement.z = forward_velocity;
 
     // check for movement inputs
     wasd_movement();
@@ -46,76 +46,64 @@ void Player::_process(float delta) {
     other_inputs();
 }
 
-void Player::_physics_process(float delta) {
-    // Always move entire player node forward
-    movement.z = 20 * forward_velocity * delta;
+void Player::_physics_process(float delta) 
+{
+    // Move player forward
     move_and_slide(movement, Vector3::UP, false, 4, 0.785398, true);
 
-    // Move player_area specifically up/down left/right according to inputs
-    player_movement.x = (player_movement.x * delta * movement_velocity);
-    player_movement.y = (player_movement.y * delta * movement_velocity);
-    player_movement.z = 0;
-    Vector3 old_pos = player_area->get_translation();
-    // Only allow player to move within certain box
-    if (old_pos.x + player_movement.x >= 16 || old_pos.x + player_movement.x <= -16) {
-        player_movement.x = 0;
+    // Move reticle according to inputs
+    reticle_movement.x *= float(movement_velocity / 30);
+    reticle_movement.y *= float(movement_velocity / 30);
+    reticle_movement.z = 0;
+    // make sure reticle stays in viewable area
+    Vector3 old_pos = reticle->get_translation();
+    Vector3 new_pos = Vector3(old_pos.x + reticle_movement.x, old_pos.y + reticle_movement.y, 0);
+    if (new_pos.x > 38.5 || new_pos.x < -38.5) {
+        reticle_movement.x = 0;
     }
-    if (old_pos.y + player_movement.y >= 10 || old_pos.y + player_movement.y <= -10) {
-        player_movement.y = 0;
+    if (new_pos.y > 21 || new_pos.y < -21) {
+        reticle_movement.y = 0;
     }
-    player_area->global_translate(player_movement);
+    reticle->global_translate(reticle_movement);
+    
+    // Store current rotation
+    Vector3 new_rotation = player_area->get_rotation();
 
-    // Also rotate the player_area in direction that we're moving (max 45 degrees);
-    // left/right
-    Vector3 current_rotation = player_area->get_rotation();
-    if (left_or_right == left) {
-        Godot::print("here1");
-        if (current_rotation.y < 46*(M_PI/180)) {
-            Godot::print("here12");
-            player_area->rotate_y(2*(M_PI/180));
+    // want player_area to follow the reticle, but lag behind a little bit
+    Vector3 reticle_pos = reticle->get_transform().origin;
+    Vector3 area_pos = player_area->get_transform().origin;
+    Vector3 difference_vec = Vector3((reticle_pos.x / 2) - area_pos.x, (reticle_pos.y / 2) - area_pos.y, 0);
+    Vector3 player_area_movement = Vector3(difference_vec.x / 15, difference_vec.y / 15, 0);
+    player_area->global_translate(player_area_movement);
+    // use look at to find x and y rotation that looks at reticle
+    player_area->look_at(reticle->get_global_transform().origin, Vector3::UP);
+
+    // Updated saved rotation with x and y rotation
+    new_rotation.x = player_area->get_rotation().x;
+    new_rotation.y = player_area->get_rotation().y;
+
+    // Set rotation to that rotation (without look_at's z, we'll do our own z)
+    player_area->set_rotation(new_rotation);
+
+    // rotate the player area's z axis (over time) if flip inputs are pressed
+    if (flipped_left && !flipped_right) {
+        if (new_rotation.z < 90*(M_PI/180)) {
+            player_area->rotate_z(-4*(M_PI/180));
         }
-    } else if (left_or_right == right) {
-        Godot::print("here2");
-        if (current_rotation.y > -46*(M_PI/180)) {
-            Godot::print("here22");
-            player_area->rotate_y(-2*(M_PI/180));
+    } else if (flipped_right && !flipped_left) {
+        if (new_rotation.z > -90*(M_PI/180)) {
+            player_area->rotate_z(4*(M_PI/180));
         }
-    } else if (left_or_right == neither) {
-        Godot::print("here3");
-        if (current_rotation.y > 0) {
-            player_area->rotate_y(-1*(M_PI/180));
-        } else if (current_rotation.y < 0) {
-            player_area->rotate_y(1*(M_PI/180));
+    } else {
+        if (new_rotation.z != 0 && new_rotation.z > 0) {
+            player_area->rotate_z(2*(M_PI/180));
+        } else if (new_rotation.z != 0 && new_rotation.z < 0) {
+            player_area->rotate_z(-2*(M_PI/180));
         }
-        if (current_rotation.y > (-1*(M_PI/180)) &&  current_rotation.y < (1*(M_PI/180))) {
-            player_area->set_rotation(Vector3(player_area->get_rotation().x, 0, player_area->get_rotation().z));
+        if (new_rotation.z < 3*(M_PI/180) && new_rotation.z > -3*(M_PI/180)) {
+            player_area->set_rotation(Vector3(new_rotation.x, new_rotation.y, 0));
         }
     }
-    // up/down
-    if (up_or_down == up) {
-        if (current_rotation.x > -46*(M_PI/180)) {
-            player_area->rotate_x(-2*(M_PI/180));
-        }
-    } else if (up_or_down == down) {
-        if (current_rotation.x < 46*(M_PI/180)) {
-            player_area->rotate_x(2*(M_PI/180));
-        }
-    } else if (up_or_down == none) {
-        if (current_rotation.x > 0) {
-            player_area->rotate_x(-1*(M_PI/180));
-        } else if (current_rotation.x < 0) {
-            player_area->rotate_x(1*(M_PI/180));
-        }
-        if (current_rotation.x > (-1*(M_PI/180)) &&  current_rotation.x < (1*(M_PI/180))) {
-            player_area->set_rotation(Vector3(0, player_area->get_rotation().y, player_area->get_rotation().z));
-        }
-    }
-
-    // Set z rotation to zero
-    player_area->set_rotation(Vector3(player_area->get_rotation().x, player_area->get_rotation().y, 0));
-
-    // Place reticle at end of raycast
-    reticle->set_translation(raycast->get_cast_to());
 }
 
 
@@ -127,26 +115,26 @@ void Player::collision_handler(Area* area) {
 void Player::wasd_movement() {
     // Up/Down
     if (input->is_action_pressed("w")) {
-        player_movement.y = 3;
-        up_or_down = up;
+        movement.y = 1;
+        reticle_movement.y += 1;
     } else if (input->is_action_pressed("s")) {
-        player_movement.y = -3;
-        up_or_down = down;
+        movement.y = -1;
+        reticle_movement.y -= 1;
     } else {
-        player_movement.y = 0;
-        up_or_down = none;
+        movement.y = 0;
+        reticle_movement.y = 0;
     }
 
     // Left/Right
     if (input->is_action_pressed("a")) {
-        player_movement.x = 3;
-        left_or_right = left;
+        movement.x = 1;
+        reticle_movement.x += 1;
     } else if (input->is_action_pressed("d")) {
-        player_movement.x = -3;
-        left_or_right = right;
+        movement.x = -1;
+        reticle_movement.x -= 1;
     } else {
-        player_movement.x = 0;
-        left_or_right = neither;
+        movement.x = 0;
+        reticle_movement.x = 0;
     }
 }
 

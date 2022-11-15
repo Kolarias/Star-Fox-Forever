@@ -13,9 +13,6 @@
 #include <string>
 #include <sprite3d.hpp>
 
-enum UP_OR_DOWN {up, down, none};
-enum LEFT_OR_RIGHT {left, right, neither};
-
 namespace Player  {
 
 class Player : public KinematicBody  {
@@ -33,10 +30,7 @@ private:
     Vector3 movement;
     Input* input;
     Sprite3D* reticle;
-    Vector3 player_movement;
-    RayCast* raycast;
-    UP_OR_DOWN up_or_down;
-    LEFT_OR_RIGHT left_or_right;
+    Vector3 reticle_movement;
     bool flipped_left;
     bool flipped_right;
 
