@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://bin/laser.gdns" type="Script" id=1]
+[ext_resource path="res://laser.mp3" type="AudioStream" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 
@@ -29,3 +30,8 @@ material/0 = null
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 mesh = SubResource( 3 )
 material/0 = null
+
+[node name="LaserAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = -10.0
+pitch_scale = 1.05

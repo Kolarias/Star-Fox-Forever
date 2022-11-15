@@ -26,7 +26,6 @@ void Player::_init() {
 
 void Player::_ready() {
     bgm_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/BackgroundAudio"));
-    laser_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/LaserAudio"));
     start_pos = get_global_transform();
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
     reticle = (Sprite3D*)(player->get_node("Reticle"));
@@ -95,17 +94,17 @@ void Player::_physics_process(float delta)
     // rotate the player area's z axis (over time) if flip inputs are pressed
     if (flipped_left && !flipped_right) {
         if (new_rotation.z < 90*(M_PI/180)) {
-            player_area->rotate_z(-4*(M_PI/180));
+            player_area->rotate_z(-6*(M_PI/180));
         }
     } else if (flipped_right && !flipped_left) {
         if (new_rotation.z > -90*(M_PI/180)) {
-            player_area->rotate_z(4*(M_PI/180));
+            player_area->rotate_z(6*(M_PI/180));
         }
     } else {
         if (new_rotation.z != 0 && new_rotation.z > 0) {
-            player_area->rotate_z(2*(M_PI/180));
+            player_area->rotate_z(3*(M_PI/180));
         } else if (new_rotation.z != 0 && new_rotation.z < 0) {
-            player_area->rotate_z(-2*(M_PI/180));
+            player_area->rotate_z(-3*(M_PI/180));
         }
         if (new_rotation.z < 3*(M_PI/180) && new_rotation.z > -3*(M_PI/180)) {
             player_area->set_rotation(Vector3(new_rotation.x, new_rotation.y, 0));
@@ -179,7 +178,6 @@ void Player::handle_fire() {
     // Spawn a laser into the current level tree. Laser will handle aiming
     KinematicBody* laser = Object::cast_to<KinematicBody>(laser_scene->instance());
     get_node("/root/Level/Player")->add_child(laser, true);
-    laser_audio->play();
 }
 
 

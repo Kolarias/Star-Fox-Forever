@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include <KinematicBody.hpp>
+#include <AudioStreamPlayer.hpp>
 #include <Area.hpp>
 #include <string>
 #include <Sprite3D.hpp>
@@ -16,6 +17,7 @@ class Laser : public KinematicBody {
 
 private:
     float velocity;
+    AudioStreamPlayer* laser_audio;
     Sprite3D* reticle;
     Area* player_area;
     RayCast* raycast;

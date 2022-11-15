@@ -31,7 +31,6 @@ private:
     Spatial* level;
     Ref<PackedScene> laser_scene;
     AudioStreamPlayer* bgm_audio;
-    AudioStreamPlayer* laser_audio;
     Transform start_pos;
     KinematicBody* player;
     Area* player_area;
