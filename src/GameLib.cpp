@@ -18,4 +18,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
     godot::register_class<Menu::Menu>();
     godot::register_class<PauseMenu::PauseMenu>();
     godot::register_class<Enemy::Enemy>();
+    godot::register_class<Laser::Laser>();
 }

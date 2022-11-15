@@ -25,11 +25,18 @@ void Player::_init() {
 }
 
 void Player::_ready() {
+    bgm_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/BackgroundAudio"));
+    laser_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/LaserAudio"));
     start_pos = get_global_transform();
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
     reticle = (Sprite3D*)(player->get_node("Reticle"));
     player_area = (Area*)(player->get_node("PlayerArea"));
     player_area->connect("area_entered", player, "collision_handler");
+    laser_start = (RayCast*)(player->get_node("LaserStart"));
+    ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
+    laser_scene = resourceLoader->load("res://Laser.tscn");
+    bgm_audio->play();
+    bgm_audio->set_stream_paused(mute);
 }
 
 void Player::_process(float delta) {
@@ -39,11 +46,11 @@ void Player::_process(float delta) {
     // Always move forward
     movement.z = forward_velocity;
 
-    // check for movement inputs
-    wasd_movement();
-
     // check for other inputs
     other_inputs();
+
+    // check for movement inputs
+    wasd_movement();
 }
 
 void Player::_physics_process(float delta) 
@@ -119,19 +126,27 @@ void Player::wasd_movement() {
         reticle_movement.y += 1;
     } else if (input->is_action_pressed("s")) {
         movement.y = -1;
-        reticle_movement.y -= 1;
+        reticle_movement.y += -1;
     } else {
         movement.y = 0;
         reticle_movement.y = 0;
     }
 
-    // Left/Right
+    // Left/Right - give bonus speed if flipped in same direction!
     if (input->is_action_pressed("a")) {
         movement.x = 1;
-        reticle_movement.x += 1;
+        if (flipped_left) {
+            reticle_movement.x += 1.5;
+        } else {
+            reticle_movement.x += 1;
+        }
     } else if (input->is_action_pressed("d")) {
         movement.x = -1;
-        reticle_movement.x -= 1;
+        if (flipped_right) {
+            reticle_movement.x += -1.5;
+        } else {
+            reticle_movement.x += -1;
+        }
     } else {
         movement.x = 0;
         reticle_movement.x = 0;
@@ -153,6 +168,18 @@ void Player::other_inputs() {
         flipped_right = false;
     }
 
+    // fire lasers
+    if (input->is_action_just_pressed("fire")) {
+        handle_fire();
+    }
+}
+
+// Helper function for firing lasers
+void Player::handle_fire() {
+    // Spawn a laser into the current level tree. Laser will handle aiming
+    KinematicBody* laser = Object::cast_to<KinematicBody>(laser_scene->instance());
+    get_node("/root/Level/Player")->add_child(laser, true);
+    laser_audio->play();
 }
 
 

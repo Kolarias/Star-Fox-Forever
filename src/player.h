@@ -12,6 +12,10 @@
 #include <SceneTree.hpp>
 #include <string>
 #include <sprite3d.hpp>
+#include <ResourceLoader.hpp>
+#include <laser.h>
+#include <Spatial.hpp>
+#include <PackedScene.hpp>
 
 namespace Player  {
 
@@ -24,6 +28,10 @@ private:
     float movement_velocity;
 
     // Non-editable in Godot editor
+    Spatial* level;
+    Ref<PackedScene> laser_scene;
+    AudioStreamPlayer* bgm_audio;
+    AudioStreamPlayer* laser_audio;
     Transform start_pos;
     KinematicBody* player;
     Area* player_area;
@@ -31,6 +39,7 @@ private:
     Input* input;
     Sprite3D* reticle;
     Vector3 reticle_movement;
+    RayCast* laser_start;
     bool flipped_left;
     bool flipped_right;
 
@@ -47,6 +56,7 @@ public:
     void collision_handler(Area* area);
     void wasd_movement();
     void other_inputs();
+    void handle_fire();
 };
 }
 

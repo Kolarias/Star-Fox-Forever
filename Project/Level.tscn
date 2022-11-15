@@ -14,7 +14,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14, 0 )
 script = ExtResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 20, 0, 0, 0, 20, 0, 0, 0, 1, 0, 0, 50 )
+transform = Transform( 20, 0, 0, 0, 10, 0, 0, 0, 1, 0, 0, 50 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="CollisionShape"]
