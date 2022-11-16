@@ -14,8 +14,10 @@
 #include <sprite3d.hpp>
 #include <ResourceLoader.hpp>
 #include <laser.h>
+#include <enemy.h>
 #include <Spatial.hpp>
 #include <PackedScene.hpp>
+#include <TextureProgress.hpp>
 
 namespace Player  {
 
@@ -26,11 +28,15 @@ private:
     // Editable in Godot editor
     float forward_velocity;
     float movement_velocity;
+    int collision_damage;
+    int enemy_damage;
 
     // Non-editable in Godot editor
     Spatial* level;
     Ref<PackedScene> laser_scene;
+    TextureProgress* hp_gauge;
     AudioStreamPlayer* bgm_audio;
+    AudioStreamPlayer* damage_audio;
     Transform start_pos;
     KinematicBody* player;
     Area* player_area;

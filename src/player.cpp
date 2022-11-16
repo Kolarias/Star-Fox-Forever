@@ -13,6 +13,8 @@ void Player::_register_methods(){
     
     register_property<Player, float>("Forward Velocity", &Player::forward_velocity, 15.0);
     register_property<Player, float>("Movement Velocity", &Player::movement_velocity, 10.0);
+    register_property<Player, int>("Collision Damage", &Player::collision_damage, 10);
+    register_property<Player, int>("Enemy Damage", &Player::enemy_damage, 5);
 }
 
 void Player::_init() {
@@ -22,15 +24,19 @@ void Player::_init() {
     mute = false;
     flipped_left = false;
     flipped_right = false;
+    collision_damage = 10;
+    enemy_damage = 5;
 }
 
 void Player::_ready() {
     bgm_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/BackgroundAudio"));
+    damage_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/DamageAudio"));
+    hp_gauge = Object::cast_to<TextureProgress>(Node::get_node("/root/Level/Player/HealthBar/Bar/Gauge"));
     start_pos = get_global_transform();
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
     reticle = (Sprite3D*)(player->get_node("Reticle"));
     player_area = (Area*)(player->get_node("PlayerArea"));
-    player_area->connect("area_entered", player, "collision_handler");
+    player_area->connect("body_entered", player, "collision_handler");
     laser_start = (RayCast*)(player->get_node("LaserStart"));
     ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
     laser_scene = resourceLoader->load("res://Laser.tscn");
@@ -55,7 +61,7 @@ void Player::_process(float delta) {
 void Player::_physics_process(float delta) 
 {
     // Move player forward
-    move_and_slide(movement, Vector3::UP, false, 4, 0.785398, true);
+    player->translate(Vector3(0,0,movement.z * delta));
 
     // Move reticle according to inputs
     reticle_movement.x *= float(movement_velocity / 30);
@@ -112,9 +118,37 @@ void Player::_physics_process(float delta)
     }
 }
 
-
+// If collide into walls, enemies, or enemy projectiles, take damage, remove health,
+// become invulnerable temporarily
 void Player::collision_handler(Area* area) {
-    
+    Godot::print("HERE!");
+    Laser::Laser* laser = Object::cast_to<Laser::Laser>(area);
+    Enemy::Enemy* enemy = Object::cast_to<Enemy::Enemy>(area);
+    if(!laser && enemy) {
+        int curr_count = hp_gauge->get_value();
+        curr_count -= enemy_damage;
+        if (curr_count == 0) {
+            // died; reset scene
+            get_tree()->reload_current_scene();
+        } else {
+            hp_gauge->set_value(curr_count);
+        }
+        if (!mute) {
+            damage_audio->play();
+        }
+    } else if (!laser) {
+        int curr_count = hp_gauge->get_value();
+        curr_count -= collision_damage;
+        if (curr_count == 0) {
+            // died; reset scene
+            get_tree()->reload_current_scene();
+        } else {
+            hp_gauge->set_value(curr_count);
+        }
+        if (!mute) {
+            damage_audio->play();
+        }
+    }
 }
 
 // Helper function that handles all cases of WASD player movement
