@@ -2,6 +2,7 @@
 #define LASER_H
 
 #include "Common.h"
+#include "player.h"
 #include <KinematicBody.hpp>
 #include <AudioStreamPlayer.hpp>
 #include <Area.hpp>

@@ -1,14 +1,72 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Arwing.tscn" type="PackedScene" id=1]
-[ext_resource path="res://reticle.png" type="Texture" id=2]
-[ext_resource path="res://Corneria.mp3" type="AudioStream" id=3]
+[ext_resource path="res://assets/reticle.png" type="Texture" id=2]
+[ext_resource path="res://assets/Corneria.mp3" type="AudioStream" id=3]
 [ext_resource path="res://HealthBar.tscn" type="PackedScene" id=4]
-[ext_resource path="res://damage.mp3" type="AudioStream" id=5]
+[ext_resource path="res://assets/damage.mp3" type="AudioStream" id=5]
+[ext_resource path="res://RedArwing.tscn" type="PackedScene" id=6]
 
-[sub_resource type="CapsuleShape" id=1]
-radius = 1.7654
-height = 1.20961
+[sub_resource type="Animation" id=1]
+resource_name = "Collision"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("Arwing:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("RedArwing:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("RedArwing:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 180, 0 ), Vector3( -14, 188, 5 ), Vector3( 21, 174, 16 ), Vector3( 15, 197, -1 ), Vector3( 11, 167, -9 ), Vector3( -11, 162, -10 ), Vector3( 0, 180, 0 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "idle"
+length = 3.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Arwing:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7, 2.3, 3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 180, 0 ), Vector3( 0, 180, 1 ), Vector3( 0, 180, -2 ), Vector3( 0, 180, 0 ) ]
+}
+
+[sub_resource type="CapsuleShape" id=3]
+radius = 1.80949
+height = 0.858354
 
 [node name="Player" type="KinematicBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0 )
@@ -22,9 +80,21 @@ billboard = 1
 texture = ExtResource( 2 )
 
 [node name="PlayerArea" type="Area" parent="."]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerArea"]
+anims/Collision = SubResource( 1 )
+anims/idle = SubResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="PlayerArea"]
+transform = Transform( 1, 0, 0, 0, 0.75, 0, 0, 0, 1, 0, 0, 0 )
+shape = SubResource( 3 )
 
 [node name="Arwing" parent="PlayerArea" instance=ExtResource( 1 )]
-shape = SubResource( 1 )
+transform = Transform( -0.999739, -0.0228244, -8.74228e-08, -0.0228244, 0.999739, 0, 8.74e-08, 1.99537e-09, -1, 0, 0, 0 )
+
+[node name="RedArwing" parent="PlayerArea" instance=ExtResource( 6 )]
+visible = false
 
 [node name="OmniLight" type="OmniLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, -15 )

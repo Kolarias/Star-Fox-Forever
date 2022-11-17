@@ -2,6 +2,10 @@
 #include <menu.h>
 #include <pausemenu.h>
 #include <enemy.h>
+#include <laser.h>
+#include <level.h>
+#include <levelobject.h>
+
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
     godot::Godot::gdnative_init(o);
@@ -19,4 +23,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
     godot::register_class<PauseMenu::PauseMenu>();
     godot::register_class<Enemy::Enemy>();
     godot::register_class<Laser::Laser>();
+    godot::register_class<Level::Level>();
+    godot::register_class<LevelObject::LevelObject>();
 }

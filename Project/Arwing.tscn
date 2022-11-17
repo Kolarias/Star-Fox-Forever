@@ -226,7 +226,7 @@ surfaces/0 = {
 "vertex_count": 85
 }
 
-[node name="Arwing" type="CollisionShape"]
+[node name="Arwing" type="MeshInstance"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 
 [node name="Object_2" type="MeshInstance" parent="."]
@@ -291,6 +291,7 @@ material/0 = null
 
 [node name="Object_14" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
+use_in_baked_light = true
 mesh = SubResource( 13 )
 material/0 = null
 

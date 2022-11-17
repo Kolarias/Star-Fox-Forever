@@ -25,7 +25,7 @@ void Laser::_ready() {
     laser = Object::cast_to<KinematicBody>(Node::get_node("."));
     laser_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("LaserAudio"));
     area = (Area*)laser->get_node("Area");
-    area->connect("area_entered", laser, "collision_handler");
+    area->connect("body_entered", laser, "collision_handler");
     laser->set_translation(Vector3(player_area->get_translation().x, player_area->get_translation().y, player_area->get_translation().z + 1));
     //laser->look_at(reticle->get_translation(), Vector3::UP);
     normal = (reticle->get_translation() - laser->get_translation()).normalized();
@@ -35,9 +35,13 @@ void Laser::_ready() {
 
 void Laser::_process(float delta) {
     // If we're too far away from player, delete self
-    if ((laser->get_translation().distance_to(player_area->get_translation())) > 100) {
-        laser->queue_free();
+    if ((get_translation().distance_to(player_area->get_translation())) > 100) {
+        queue_free();
     }
+
+    // Move forward just like Player
+    Player::Player* player = Object::cast_to<Player::Player>(Node::get_node("/root/Level/Player"));
+    laser->translate(Vector3(0,0,player->forward_velocity * delta));
 
 }
 
@@ -46,17 +50,19 @@ void Laser::_physics_process(float delta) {
     move_and_slide(normal * velocity, Vector3::UP, false, 4, 0.785398, true);
 
     // Also stretch laser as is goes further away
-    Vector3 scale = laser->get_scale(); 
-    laser->set_scale(Vector3(scale.x, scale.y, scale.z + (15 * delta)));
+    if (laser) {
+        Vector3 scale = laser->get_scale(); 
+        laser->set_scale(Vector3(scale.x, scale.y, scale.z + (7 * delta)));
+    }
 }
 
 void Laser::collision_handler(Area* area) {
-    // Upon colliding with ANYTHING except player, delete self
+    // Upon colliding with ANYTHING except player, delete laser (but keep audio)
     Player::Player* player = Object::cast_to<Player::Player>(area->get_parent());
     if (player) {
         return;
     }
-    laser->queue_free();
+    this->area->queue_free();
 }
 
 }

@@ -40,6 +40,7 @@ void Player::_ready() {
     laser_start = (RayCast*)(player->get_node("LaserStart"));
     ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
     laser_scene = resourceLoader->load("res://Laser.tscn");
+    animation_player = (AnimationPlayer*)(player_area->get_node("AnimationPlayer"));
     bgm_audio->play();
     bgm_audio->set_stream_paused(mute);
 }
@@ -50,6 +51,11 @@ void Player::_process(float delta) {
 
     // Always move forward
     movement.z = forward_velocity;
+
+    // Always play idle animation (if another thing isn't already playing)
+    if (!animation_player->is_playing()){
+        animation_player->play("idle");
+    }
 
     // check for other inputs
     other_inputs();
@@ -121,7 +127,6 @@ void Player::_physics_process(float delta)
 // If collide into walls, enemies, or enemy projectiles, take damage, remove health,
 // become invulnerable temporarily
 void Player::collision_handler(Area* area) {
-    Godot::print("HERE!");
     Laser::Laser* laser = Object::cast_to<Laser::Laser>(area);
     Enemy::Enemy* enemy = Object::cast_to<Enemy::Enemy>(area);
     if(!laser && enemy) {
@@ -133,9 +138,8 @@ void Player::collision_handler(Area* area) {
         } else {
             hp_gauge->set_value(curr_count);
         }
-        if (!mute) {
-            damage_audio->play();
-        }
+        damage_audio->play();
+        animation_player->play("Collision");
     } else if (!laser) {
         int curr_count = hp_gauge->get_value();
         curr_count -= collision_damage;
@@ -145,9 +149,8 @@ void Player::collision_handler(Area* area) {
         } else {
             hp_gauge->set_value(curr_count);
         }
-        if (!mute) {
-            damage_audio->play();
-        }
+        damage_audio->play();
+        animation_player->play("Collision");
     }
 }
 
