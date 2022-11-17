@@ -28,6 +28,7 @@ private:
     Timer* level_timer;
     float time;
     Ref<PackedScene> center_ball_scene;
+    Ref<PackedScene> easy_enemy_scene;
 
 public:
     int hits;

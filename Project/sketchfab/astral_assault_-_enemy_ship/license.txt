@@ -1,0 +1,11 @@
+Model Information:
+* title:	Astral Assault - Enemy Ship
+* source:	https://sketchfab.com/3d-models/astral-assault-enemy-ship-ddfbf9772cfc4a01a217957ced9ffc03
+* author:	Rejala (https://sketchfab.com/Rejala)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Astral Assault - Enemy Ship" (https://sketchfab.com/3d-models/astral-assault-enemy-ship-ddfbf9772cfc4a01a217957ced9ffc03) by Rejala (https://sketchfab.com/Rejala) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

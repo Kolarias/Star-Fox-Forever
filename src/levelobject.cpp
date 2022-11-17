@@ -17,7 +17,7 @@ void LevelObject::_init() {
 void LevelObject::_ready() {
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
     // spawn 100 units in front of player
-    Object::cast_to<StaticBody>(Node::get_node("."))->set_translation(Vector3(player->get_translation().x, player->get_translation().y, player->get_translation().z + 90));
+    Object::cast_to<StaticBody>(Node::get_node("."))->set_translation(Vector3(player->get_translation().x - 5, player->get_translation().y - 5, player->get_translation().z + 90));
 }
 
 void LevelObject::_process(float delta) {

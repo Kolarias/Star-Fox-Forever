@@ -47,7 +47,8 @@ void Laser::_process(float delta) {
 
 void Laser::_physics_process(float delta) {
     // Move in direction that was given when laser was created
-    move_and_slide(normal * velocity, Vector3::UP, false, 4, 0.785398, true);
+    //move_and_slide(normal * velocity * delta, Vector3::UP, false, 4, 0.785398, true);
+    move_and_collide(normal * velocity * delta);
 
     // Also stretch laser as is goes further away
     if (laser) {
@@ -63,6 +64,7 @@ void Laser::collision_handler(Area* area) {
         return;
     }
     this->area->queue_free();
-}
+    laser->get_node("CollisionShape")->queue_free();
 
+}
 }

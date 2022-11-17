@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include <KinematicBody.hpp>
+#include <StaticBody.hpp>
 #include <Transform.hpp>
 #include <Area.hpp>
 #include <SceneTree.hpp>
@@ -14,11 +15,14 @@
 namespace Enemy {
 
 class Enemy : public KinematicBody {
-    GODOT_CLASS(Enemy, KinematicBody);
+    GODOT_CLASS(Enemy, Area);
 
 private:
+    KinematicBody* player;
+    int hp;
 
 public:
+    int difficulty;
 
     static void _register_methods();
 

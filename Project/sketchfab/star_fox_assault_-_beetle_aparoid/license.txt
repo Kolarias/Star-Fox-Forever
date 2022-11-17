@@ -1,0 +1,11 @@
+Model Information:
+* title:	Star Fox Assault - Beetle Aparoid
+* source:	https://sketchfab.com/3d-models/star-fox-assault-beetle-aparoid-1545a44069cc446bb75204b54f8e50ea
+* author:	Donjuan301 (https://sketchfab.com/Donjuan301)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Star Fox Assault - Beetle Aparoid" (https://sketchfab.com/3d-models/star-fox-assault-beetle-aparoid-1545a44069cc446bb75204b54f8e50ea) by Donjuan301 (https://sketchfab.com/Donjuan301) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

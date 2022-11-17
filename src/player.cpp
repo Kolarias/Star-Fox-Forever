@@ -132,7 +132,7 @@ void Player::collision_handler(Area* area) {
     if(!laser && enemy) {
         int curr_count = hp_gauge->get_value();
         curr_count -= enemy_damage;
-        if (curr_count == 0) {
+        if (curr_count <= 0) {
             // died; reset scene
             get_tree()->reload_current_scene();
         } else {
@@ -143,7 +143,7 @@ void Player::collision_handler(Area* area) {
     } else if (!laser) {
         int curr_count = hp_gauge->get_value();
         curr_count -= collision_damage;
-        if (curr_count == 0) {
+        if (curr_count <= 0) {
             // died; reset scene
             get_tree()->reload_current_scene();
         } else {

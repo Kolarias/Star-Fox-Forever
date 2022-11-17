@@ -26,6 +26,7 @@ void Level::_ready() {
     level_timer->connect("timeout", level, "_on_timeout");
     ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
     center_ball_scene = resourceLoader->load("res://level_objects/CenterBall.tscn");
+    easy_enemy_scene = resourceLoader->load("res://enemies/EasyEnemy.tscn");
 }
 
 void Level::_process(float delta) {
@@ -59,7 +60,9 @@ void Level::update_hits() {
 // When timer pops, decide what enemy or terrain thing to spawn
 void Level::_on_timeout() {
     StaticBody* center_ball = Object::cast_to<StaticBody>(center_ball_scene->instance());
+    KinematicBody* easy_enemy = Object::cast_to<KinematicBody>(easy_enemy_scene->instance());
     level->add_child(center_ball, true);
+    level->add_child(easy_enemy, true);
 }
 
 }
