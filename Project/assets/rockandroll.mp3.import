@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/rockandroll.mp3-7e3df70d955a9dbaa452c596816030a6.mp3str"
+
+[deps]
+
+source_file="res://assets/rockandroll.mp3"
+dest_files=[ "res://.import/rockandroll.mp3-7e3df70d955a9dbaa452c596816030a6.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

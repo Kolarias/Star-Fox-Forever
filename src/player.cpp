@@ -1,5 +1,6 @@
 #include "player.h"
 #include "enemy.h"
+#include "level.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -26,12 +27,15 @@ void Player::_init() {
     flipped_right = false;
     collision_damage = 10;
     enemy_damage = 5;
+    game_ended = false;
 }
 
 void Player::_ready() {
     bgm_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/BackgroundAudio"));
+    end_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/EndAudio"));
     damage_audio = Object::cast_to<AudioStreamPlayer>(Node::get_node("/root/Level/Player/DamageAudio"));
     hp_gauge = Object::cast_to<TextureProgress>(Node::get_node("/root/Level/Player/HealthBar/Bar/Gauge"));
+    end_menu = Object::cast_to<Control>(Node::get_node("/root/Level/CanvasLayer2/EndMenu"));
     start_pos = get_global_transform();
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
     reticle = (Sprite3D*)(player->get_node("Reticle"));
@@ -46,6 +50,21 @@ void Player::_ready() {
 }
 
 void Player::_process(float delta) {
+    // If game is over, dont' do anything, wait for animation to play, then go
+    // to end screen
+    if (game_ended) {
+        movement.z = forward_velocity / 2;
+        Level::Level* level = Object::cast_to<Level::Level>(Node::get_node("/root/Level"));
+        if (!level->animation_player->is_playing()) {
+            end_menu->set_visible(true);
+            bgm_audio->set_stream_paused(true);
+            bgm_audio->queue_free();
+            end_audio->play();
+            get_tree()->set_pause(true);
+        }
+        return;
+    }
+
     // Get input
     input = Input::get_singleton();
 
@@ -127,30 +146,31 @@ void Player::_physics_process(float delta)
 // If collide into walls, enemies, or enemy projectiles, take damage, remove health,
 // become invulnerable temporarily
 void Player::collision_handler(Area* area) {
+    if (game_ended) {
+        return;
+    }
     Laser::Laser* laser = Object::cast_to<Laser::Laser>(area);
     Enemy::Enemy* enemy = Object::cast_to<Enemy::Enemy>(area);
     if(!laser && enemy) {
         int curr_count = hp_gauge->get_value();
         curr_count -= enemy_damage;
-        if (curr_count <= 0) {
-            // died; reset scene
-            get_tree()->reload_current_scene();
-        } else {
-            hp_gauge->set_value(curr_count);
-        }
+        hp_gauge->set_value(curr_count);
         damage_audio->play();
         animation_player->play("Collision");
+        if (curr_count <= 0) {
+            // died; reset scene
+            end_game();
+        }
     } else if (!laser) {
         int curr_count = hp_gauge->get_value();
         curr_count -= collision_damage;
-        if (curr_count <= 0) {
-            // died; reset scene
-            get_tree()->reload_current_scene();
-        } else {
-            hp_gauge->set_value(curr_count);
-        }
+        hp_gauge->set_value(curr_count);
         damage_audio->play();
         animation_player->play("Collision");
+        if (curr_count <= 0) {
+            // died; reset scene
+            end_game();
+        }
     }
 }
 
@@ -215,6 +235,12 @@ void Player::handle_fire() {
     // Spawn a laser into the current level tree. Laser will handle aiming
     KinematicBody* laser = Object::cast_to<KinematicBody>(laser_scene->instance());
     get_node("/root/Level/Player")->add_child(laser, true);
+}
+
+void Player::end_game() {
+    game_ended = true;
+    Level::Level* level = Object::cast_to<Level::Level>(Node::get_node("/root/Level"));
+    level->animation_player->play("End");
 }
 
 

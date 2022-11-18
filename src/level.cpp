@@ -27,6 +27,8 @@ void Level::_ready() {
     ResourceLoader* resourceLoader = ResourceLoader::get_singleton();
     center_ball_scene = resourceLoader->load("res://level_objects/CenterBall.tscn");
     easy_enemy_scene = resourceLoader->load("res://enemies/EasyEnemy.tscn");
+    animation_player = (AnimationPlayer*)(level->get_node("AnimationPlayer"));
+    animation_player->play("Start");
 }
 
 void Level::_process(float delta) {
@@ -61,8 +63,10 @@ void Level::update_hits() {
 void Level::_on_timeout() {
     StaticBody* center_ball = Object::cast_to<StaticBody>(center_ball_scene->instance());
     KinematicBody* easy_enemy = Object::cast_to<KinematicBody>(easy_enemy_scene->instance());
-    level->add_child(center_ball, true);
-    level->add_child(easy_enemy, true);
+    if (!Object::cast_to<Player::Player>(Node::get_node("/root/Level/Player"))->game_ended) {
+        level->add_child(center_ball, true);
+        level->add_child(easy_enemy, true);
+    }
 }
 
 }

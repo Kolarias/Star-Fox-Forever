@@ -8,12 +8,14 @@
 #include "Input.hpp"
 #include "InputEvent.hpp"
 #include "Control.hpp"
+#include "player.h"
 
 #include <string>
 
-namespace PauseMenu  {
-class PauseMenu : public Control {
-    
+namespace PauseMenu 
+{
+class PauseMenu : public Control 
+{
     GODOT_CLASS(PauseMenu, Control);
 
 private:
@@ -21,6 +23,7 @@ private:
     Input* input;
     bool isPaused;
     Control* pauseMenu;
+    Player::Player* player;
 
 public:
 

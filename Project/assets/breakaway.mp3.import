@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/breakaway.mp3-83415ee35bbb4141a138c90cb1d87a0f.mp3str"
+
+[deps]
+
+source_file="res://assets/breakaway.mp3"
+dest_files=[ "res://.import/breakaway.mp3-83415ee35bbb4141a138c90cb1d87a0f.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

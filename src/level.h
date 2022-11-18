@@ -15,6 +15,7 @@
 #include <Timer.hpp>
 #include <PackedScene.hpp>
 #include <StaticBody.hpp>
+#include <AnimationPlayer.hpp>
 
 namespace Level {
 
@@ -26,12 +27,13 @@ private:
     RichTextLabel* time_counter;
     RichTextLabel* hit_counter;
     Timer* level_timer;
-    float time;
     Ref<PackedScene> center_ball_scene;
     Ref<PackedScene> easy_enemy_scene;
 
 public:
     int hits;
+    float time;
+    AnimationPlayer* animation_player;
 
     static void _register_methods();
 

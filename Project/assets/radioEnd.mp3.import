@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/radioEnd.mp3-d22db991c4ed2c46aa728938d7cb13f1.mp3str"
+
+[deps]
+
+source_file="res://assets/radioEnd.mp3"
+dest_files=[ "res://.import/radioEnd.mp3-d22db991c4ed2c46aa728938d7cb13f1.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -19,6 +19,7 @@
 #include <PackedScene.hpp>
 #include <TextureProgress.hpp>
 #include <AnimationPlayer.hpp>
+#include <Control.hpp>
 
 namespace Player  {
 
@@ -28,9 +29,7 @@ class Player : public KinematicBody  {
 private:
     // Non-editable in Godot editor
     AnimationPlayer* animation_player;
-    Spatial* level;
     Ref<PackedScene> laser_scene;
-    AudioStreamPlayer* bgm_audio;
     AudioStreamPlayer* damage_audio;
     Transform start_pos;
     KinematicBody* player;
@@ -42,6 +41,7 @@ private:
     RayCast* laser_start;
     bool flipped_left;
     bool flipped_right;
+    Control* end_menu;
 
 public:
     // Editable in Godot editor
@@ -52,7 +52,10 @@ public:
     bool mute;
 
     // Non-editable in Godot editor
+    AudioStreamPlayer* bgm_audio;
+    AudioStreamPlayer* end_audio;
     TextureProgress* hp_gauge;
+    bool game_ended;
 
     static void _register_methods();
 
@@ -64,6 +67,7 @@ public:
     void wasd_movement();
     void other_inputs();
     void handle_fire();
+    void end_game();
 };
 }
 
