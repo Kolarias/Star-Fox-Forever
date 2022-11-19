@@ -1,9 +1,13 @@
 This project is a tribute to Star Fox 64, an absolute classic of a game that shaped my childhood in a big way. It's an on-rails shooter with an infinite, procedurally-generated level, much like mobile infinite-runner games.
 
 Controls:
+
 WASD - Move the reticle
+
 Shift/Space - Roll left/right
+
 Enter - Shoot laser
+
 Esc - Pause
 
 **Build Process:**
