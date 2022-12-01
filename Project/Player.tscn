@@ -95,6 +95,7 @@ shape = SubResource( 3 )
 transform = Transform( -0.999739, -0.0228244, -8.74228e-08, -0.0228244, 0.999739, 0, 8.74e-08, 1.99537e-09, -1, 0, 0, 0 )
 
 [node name="RedArwing" parent="PlayerArea" instance=ExtResource( 6 )]
+transform = Transform( -0.926369, -0.223217, 0.30334, -0.170458, 0.966714, 0.190809, -0.335834, 0.125053, -0.933583, 0, 0, 0 )
 visible = false
 
 [node name="OmniLight" type="OmniLight" parent="."]

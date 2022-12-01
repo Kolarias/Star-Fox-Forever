@@ -1,0 +1,11 @@
+Model Information:
+* title:	Star Fox Assault - Venomian Interceptor
+* source:	https://sketchfab.com/3d-models/star-fox-assault-venomian-interceptor-11b3f63d3a4d46eb9689e379872296de
+* author:	Donjuan301 (https://sketchfab.com/Donjuan301)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Star Fox Assault - Venomian Interceptor" (https://sketchfab.com/3d-models/star-fox-assault-venomian-interceptor-11b3f63d3a4d46eb9689e379872296de) by Donjuan301 (https://sketchfab.com/Donjuan301) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

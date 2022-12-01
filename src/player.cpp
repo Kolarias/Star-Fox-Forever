@@ -19,7 +19,7 @@ void Player::_register_methods(){
 }
 
 void Player::_init() {
-    forward_velocity = 15.0;
+    forward_velocity = 20.0;
     movement_velocity = 10.0;
     movement = Vector3();
     mute = false;
@@ -221,6 +221,12 @@ void Player::other_inputs() {
     if (input->is_action_pressed("flip_right")) {
         flipped_right = true;
     } else {
+        flipped_right = false;
+    }
+
+    // If both are pressed, neither are true
+    if (input->is_action_pressed("flip_right") && input->is_action_pressed("flip_left")) {
+        flipped_left = false;
         flipped_right = false;
     }
 

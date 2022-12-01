@@ -10,9 +10,14 @@ config_version=4
 
 [application]
 
-config/name="CS354R Final Project"
+config/name="Star Fox Forever"
 run/main_scene="res://Menu.tscn"
-config/icon="res://assets/icon.png"
+config/icon="res://assets/icon2.png"
+
+[display]
+
+window/size/width=1920
+window/size/height=1080
 
 [editor_plugins]
 

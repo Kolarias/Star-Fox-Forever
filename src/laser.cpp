@@ -53,7 +53,7 @@ void Laser::_physics_process(float delta) {
     // Also stretch laser as is goes further away
     if (laser) {
         Vector3 scale = laser->get_scale(); 
-        laser->set_scale(Vector3(scale.x, scale.y, scale.z + (7 * delta)));
+        laser->set_scale(Vector3(scale.x, scale.y, scale.z + (3 * delta)));
     }
 }
 

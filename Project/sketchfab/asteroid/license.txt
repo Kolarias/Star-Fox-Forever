@@ -1,0 +1,11 @@
+Model Information:
+* title:	Asteroid
+* source:	https://sketchfab.com/3d-models/asteroid-5b0e99a18f79453aa4798418d183afb4
+* author:	Smaran (https://sketchfab.com/brownhuman)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Asteroid" (https://sketchfab.com/3d-models/asteroid-5b0e99a18f79453aa4798418d183afb4) by Smaran (https://sketchfab.com/brownhuman) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

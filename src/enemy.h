@@ -10,6 +10,7 @@
 #include <Node.hpp>
 #include <string>
 #include "RandomNumberGenerator.hpp"
+#include <AnimationPlayer.hpp>
 #include "player.h"
 
 namespace Enemy {
@@ -18,8 +19,11 @@ class Enemy : public KinematicBody {
     GODOT_CLASS(Enemy, Area);
 
 private:
+    AnimationPlayer* animation_player;
     KinematicBody* player;
+    Node* enemy;
     int hp;
+    bool is_dead;
 
 public:
     int difficulty;

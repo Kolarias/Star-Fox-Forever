@@ -3,6 +3,7 @@
 #include "GlobalConstants.hpp"
 #include "KinematicCollision.hpp"
 #include "level.h"
+#include <cstdlib>
 
 namespace Enemy {
 
@@ -16,24 +17,37 @@ void Enemy::_register_methods()
 }
 
 void Enemy::_init() {
-    if (difficulty = 1) {
-        hp = 3;
-    } else if (difficulty = 2) {
-        hp = 4;
-    } else if (difficulty = 3) {
-        hp = 6;
-    }
 }
 
 void Enemy::_ready() {
-    Node* enemy = Node::get_node(".");
+    if (difficulty = 1) {
+        hp = 2;
+    } else if (difficulty = 2) {
+        hp = 3;
+    } else if (difficulty = 3) {
+        hp = 4;
+    }
+    enemy = Node::get_node(".");
     enemy->get_node("Area")->connect("body_entered", enemy, "collision_handler");
     player = Object::cast_to<KinematicBody>(Node::get_node("/root/Level/Player"));
-    // spawn 100 units in front of player, random spot
-    Object::cast_to<KinematicBody>(enemy)->set_translation(Vector3(player->get_translation().x + 5, player->get_translation().y + 5, player->get_translation().z + 90));
+    animation_player = (AnimationPlayer*)(enemy->get_node("AnimationPlayer"));
+    Object::cast_to<KinematicBody>(enemy)->set_translation(Vector3(player->get_translation().x, player->get_translation().y, player->get_translation().z + 90));
 }
 
 void Enemy::_process(float delta) {
+    // If dead, queue free the moment death animation is done
+    if (is_dead) {
+        if (!animation_player->is_playing()) {
+            queue_free();
+        }
+        return;
+    }
+
+    // Always play idle animation (if another thing isn't already playing)
+    if (!animation_player->is_playing()) {
+        animation_player->play("idle");
+    }
+
     // If we're too far away from player, delete self
     if ((get_translation().distance_to(player->get_translation())) > 100) {
         queue_free();
@@ -44,11 +58,24 @@ void Enemy::_physics_process(float delta) {
 }
 
 void Enemy::collision_handler(Area* area) {
+    if (is_dead) {
+        return;
+    }
+
+    if (Object::cast_to<Enemy>(area)) { 
+        return;
+    }
+
     hp -= 1;
     if (hp <= 0) {
         Level::Level* level = Object::cast_to<Level::Level>(Node::get_node("/root/Level"));
         level->update_hits();
-        queue_free();
+        is_dead = true;
+        enemy->get_node("Area")->queue_free();
+        enemy->get_node("CollisionShape")->queue_free();
+        animation_player->play("death");
+    } else {
+        animation_player->play("hurt");
     }
 }
 

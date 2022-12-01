@@ -409,9 +409,10 @@ text = "0.00"
 [node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 script = ExtResource( 2 )
+"Forward Velocity" = 20.0
 
 [node name="LevelTimer" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 1.25
 autostart = true
 
 [node name="SoundPlayer" type="AudioStreamPlayer" parent="."]

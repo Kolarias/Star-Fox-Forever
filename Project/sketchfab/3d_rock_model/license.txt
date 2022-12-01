@@ -1,0 +1,11 @@
+Model Information:
+* title:	3D Rock Model
+* source:	https://sketchfab.com/3d-models/3d-rock-model-81299956c6cb42aa8d83d6a81e042ccb
+* author:	lamar_mufti (https://sketchfab.com/lamar_mufti)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "3D Rock Model" (https://sketchfab.com/3d-models/3d-rock-model-81299956c6cb42aa8d83d6a81e042ccb) by lamar_mufti (https://sketchfab.com/lamar_mufti) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
