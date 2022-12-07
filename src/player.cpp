@@ -89,19 +89,25 @@ void Player::_physics_process(float delta)
     player->translate(Vector3(0,0,movement.z * delta));
 
     // Move reticle according to inputs
-    reticle_movement.x *= float(movement_velocity / 30);
-    reticle_movement.y *= float(movement_velocity / 30);
+    reticle_movement.x *= float(movement_velocity * delta * 1.1);
+    reticle_movement.y *= float(movement_velocity * delta * 1.1);
     reticle_movement.z = 0;
     // make sure reticle stays in viewable area
     Vector3 old_pos = reticle->get_translation();
     Vector3 new_pos = Vector3(old_pos.x + reticle_movement.x, old_pos.y + reticle_movement.y, 0);
-    if (new_pos.x > 38.5 || new_pos.x < -38.5) {
+    if (new_pos.x > 39 && reticle_movement.x > 0) {
         reticle_movement.x = 0;
     }
-    if (new_pos.y > 21 || new_pos.y < -21) {
+    if (new_pos.x < -39 && reticle_movement.x < 0) {
+        reticle_movement.x = 0;
+    }
+    if (new_pos.y > 20 && reticle_movement.y > 0) {
         reticle_movement.y = 0;
     }
-    reticle->global_translate(reticle_movement);
+    if (new_pos.y < -20 && reticle_movement.y < 0) {
+        reticle_movement.y = 0;
+    }
+    reticle->translate(reticle_movement);
     
     // Store current rotation
     Vector3 new_rotation = player_area->get_rotation();
@@ -179,10 +185,10 @@ void Player::wasd_movement() {
     // Up/Down
     if (input->is_action_pressed("w")) {
         movement.y = 1;
-        reticle_movement.y += 1;
+        reticle_movement.y = 1;
     } else if (input->is_action_pressed("s")) {
         movement.y = -1;
-        reticle_movement.y += -1;
+        reticle_movement.y = -1;
     } else {
         movement.y = 0;
         reticle_movement.y = 0;
@@ -192,16 +198,16 @@ void Player::wasd_movement() {
     if (input->is_action_pressed("a")) {
         movement.x = 1;
         if (flipped_left) {
-            reticle_movement.x += 1.5;
+            reticle_movement.x = 1.5;
         } else {
-            reticle_movement.x += 1;
+            reticle_movement.x = 1;
         }
     } else if (input->is_action_pressed("d")) {
         movement.x = -1;
         if (flipped_right) {
-            reticle_movement.x += -1.5;
+            reticle_movement.x = -1.5;
         } else {
-            reticle_movement.x += -1;
+            reticle_movement.x = -1;
         }
     } else {
         movement.x = 0;
